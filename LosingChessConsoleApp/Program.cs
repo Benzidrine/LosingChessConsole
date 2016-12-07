@@ -10,6 +10,13 @@ namespace LosingChessConsoleApp
     {
         static void Main(string[] args)
         {
+
+            Console.BackgroundColor = ConsoleColor.Blue;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(UI.Welcome("Phil is a Cunt"));
+            Console.WriteLine("Press any key to exit.");
+
+            Console.ReadKey();
         }
     }
 }
