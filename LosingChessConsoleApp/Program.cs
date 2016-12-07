@@ -15,6 +15,7 @@ namespace LosingChessConsoleApp
             Console.ForegroundColor = ConsoleColor.White;
             Console.WriteLine(UI.Welcome("Phil is a Cunt"));
             Console.WriteLine("Press any key to exit.");
+            UI.testConsoleWriteLine();
 
             Console.ReadKey();
         }

@@ -18,8 +18,13 @@ namespace LosingChessConsoleApp
         public static string Welcome(String Name)
         {
             string WelcomeMessage = "";
-            WelcomeMessage = "Hello " + Name + " " + FooBar;
+            WelcomeMessage = "Hello " + Name;
             return WelcomeMessage;
+        }
+        
+        public static void testConsoleWriteLine()
+        {
+            Console.WriteLine("test");
         }
     }
 }
