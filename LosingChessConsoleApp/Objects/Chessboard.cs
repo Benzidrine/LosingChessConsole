@@ -110,6 +110,5 @@ namespace LosingChessConsoleApp.Models
         }
 
 
-
     }
 }
