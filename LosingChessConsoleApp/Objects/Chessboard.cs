@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using LosingChessConsoleApp.Models;
 
 namespace LosingChessConsoleApp.Models
 {
@@ -15,6 +16,8 @@ namespace LosingChessConsoleApp.Models
         }
 
         int[,] ChessboardArray = new int[,] { };
+
+        List<BasePiece> ListOfPieces = new List<BasePiece>();
 
         public bool IsOdd( int num)
         {

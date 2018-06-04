@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace LosingChessConsoleApp.Models
 {
-    
+
 
     public class BasePiece
     {
@@ -24,46 +24,41 @@ namespace LosingChessConsoleApp.Models
             }
         }
 
-        private int PieceName(string val)
+        private int? PieceName(string val)
         {
             switch (val)
             {
-                case "Pawn"     : return 1 ;
-                case "Bishop"   : return 2 ;
-                case "Knight"   : return 3 ;
-                case "Rook"     : return 4 ;
-                case "Queen"    : return 5 ;
-                case "King"     : return 6 ;
-                default         : return null;
+                case "Pawn": return 1;
+                case "Bishop": return 2;
+                case "Knight": return 3;
+                case "Rook": return 4;
+                case "Queen": return 5;
+                case "King": return 6;
+                default: return null;
             }
         }
 
-        string name;
-        int Value;
-        Tuple<int, int> Position; //x y values for board position
-        int Color;  // 1 for black, -1 for white
-        bool HasNotMoved = true;
-        
-        
+        public int Value;
+        public Position Position; //x y values for board position
+        public int Color;  // 1 for black, -1 for white
+        public bool HasNotMoved = true;
 
-
-        public BasePiece(Tuple<> Position, bool Color)
-        {
-            
+        public BasePiece(Position Position, int Color)
+        {            
 
         }
 
-        public virtual bool MovePiece() { }
-        public virtual bool TakePiece() { }
-        
-
-
-
+        public virtual bool MovePiece(Position MoveTo) {
+            return false; 
+        }
+        public virtual bool TakePiece(Position MoveTo) {
+            return false;
+        }
     }
 
     public class Pawn : BasePiece
     {
-        public Pawn(Tuple<int, int> position, int color) : base(position, color)
+        public Pawn(Position position, int color) : base(position, color)
         {
             Color = color;
             Position = position;
@@ -71,29 +66,28 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool MovePiece(Tuple<int, int> MoveTo)
+        public override bool MovePiece(Position positionToMove)
         {
             bool returnval = false;
 
-            if (MoveTo.Item1 = Position.Item1)
+            if (Position.X == positionToMove.X)
             {
-                if ((MoveTo.Item2 = (Position.Item2 + 2 * Color)) && HasNotMoved) { returnval = true; }
-                else if (MoveTo.Item2 = (Position.Item2 + Color)) { returnval = true; }
+                if ((Position.Y == (positionToMove.Y + 2 * Color)) && HasNotMoved) { returnval = true; }
+                else if (Position.Y == (positionToMove.Y + Color)) { returnval = true; }
             }
 
             return returnval;
         }
 
-        public override bool TakePiece(Tuple<int, int> MoveTo)
+        public override bool TakePiece(Position positionToTake)
         {
             bool returnval = false;
-            if ((MoveTo.Item1 = Position.Item1 + 1) || (MoveTo.Item1 = Position.Item1 - 1))
+            if ((Position.X == positionToTake.X + 1) || (Position.X == positionToTake.X - 1))
             {
-                if (MoveTo.Item2 = (Position.Item2 + Color)) { returnval = true; }
+                if (Position.Y == (positionToTake.Y + Color)) { returnval = true; }
             }
-                return returnval;
+            return returnval;
         }
 
     }
-
 }
