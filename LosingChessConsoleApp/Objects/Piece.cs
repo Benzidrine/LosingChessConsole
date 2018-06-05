@@ -48,10 +48,10 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public virtual bool MovePiece(Position MoveTo) {
+        public virtual bool ValidMove(Position MoveTo) {
             return false; 
         }
-        public virtual bool TakePiece(Position MoveTo) {
+        public virtual bool ValidCapture(Position MoveTo) {
             return false;
         }
     }
@@ -66,7 +66,7 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool MovePiece(Position positionToMove)
+        public override bool ValidMove(Position positionToMove)
         {
             bool returnval = false;
 
@@ -79,7 +79,7 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
-        public override bool TakePiece(Position positionToTake)
+        public override bool ValidCapture(Position positionToTake)
         {
             bool returnval = false;
             if ((Position.X == positionToTake.X + 1) || (Position.X == positionToTake.X - 1))
@@ -90,4 +90,141 @@ namespace LosingChessConsoleApp.Models
         }
 
     }
+
+    public class Bishop : BasePiece
+    {
+        public Bishop(Position position, int color) : base(position, color)
+        {
+            Color = color;
+            Position = position;
+            Value = 3;
+
+        }
+
+        public override bool ValidMove(Position positionToMove)
+        {
+            bool returnval = false;
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+
+            if (xTestVal == yTestVal) { returnval = true; }
+
+            return returnval;
+        }
+
+        public override bool ValidCapture(Position positionToTake)
+        {
+            return this.ValidMove(positionToTake);  
+        }
+    }
+
+    public class Knight : BasePiece
+    {
+        public Knight(Position position, int color) : base(position, color)
+        {
+            Color = color;
+            Position = position;
+            Value = 3;
+
+        }
+
+        public override bool ValidMove(Position positionToMove)
+        {
+            bool returnval = false;
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+
+            if ((xTestVal == 1 && yTestVal == 2) || (xTestVal == 1 && yTestVal == 2)) { returnval = true; }
+
+            return returnval;
+        }
+
+        public override bool ValidCapture(Position positionToTake)
+        {
+            return this.ValidMove(positionToTake);
+        }
+    }
+
+    public class Rook : BasePiece
+    {
+        public Rook(Position position, int color) : base(position, color)
+        {
+            Color = color;
+            Position = position;
+            Value = 5;
+
+        }
+
+        public override bool ValidMove(Position positionToMove)
+        {
+            bool returnval = false;
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+
+            if ((xTestVal == 0) || (yTestVal == 0)) { returnval = true; }
+
+            return returnval;
+        }
+
+        public override bool ValidCapture(Position positionToTake)
+        {
+            return this.ValidMove(positionToTake);
+        }
+    }
+
+    public class Queen : BasePiece
+    {
+        public Queen(Position position, int color) : base(position, color)
+        {
+            Color = color;
+            Position = position;
+            Value = 10;
+
+        }
+
+        public override bool ValidMove(Position positionToMove)
+        {
+            bool returnval = false;
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+
+            if (xTestVal == yTestVal) { returnval = true; }
+            else if ((xTestVal == 0) || (yTestVal == 0)) { returnval = true; }
+
+            return returnval;
+        }
+
+        public override bool ValidCapture(Position positionToTake)
+        {
+            return this.ValidMove(positionToTake);
+        }
+    }
+
+    public class King : BasePiece
+    {
+        public King(Position position, int color) : base(position, color)
+        {
+            Color = color;
+            Position = position;
+            Value = 100;
+
+        }
+
+        public override bool ValidMove(Position positionToMove)
+        {
+            bool returnval = false;
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+
+            if ((xTestVal == 1 && yTestVal == 1) || (xTestVal + yTestVal == 1)) { returnval = true; }
+
+            return returnval;
+        }
+
+        public override bool ValidCapture(Position positionToTake)
+        {
+            return this.ValidMove(positionToTake);
+        }
+    }
+
 }
