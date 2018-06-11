@@ -24,8 +24,62 @@ namespace LosingChessConsoleApp.Models
             return (num % 2 == 0) ? false : true;
         }
 
-        public bool MovePiece()
+        public bool SetBoard()
         {
+            for (int x = 1; x <= 8; ++x)
+            {
+                Position pos = new Position(x, 2);
+                Pawn newPawn = new Pawn(pos, -1);
+                ListOfPieces.Add(newPawn);
+            }
+            for (int x = 1; x <= 8; ++x)
+            {
+                Position pos = new Position(x, 7);
+                Pawn newPawn = new Pawn(pos, 1);
+                ListOfPieces.Add(newPawn);
+            }
+            // row tuple (row, color)
+            var Rows = new List<Tuple<int, int>>() { Tuple.Create(1, 1), Tuple.Create(8, -1) };
+            List<int> Rooks = new List<int>() { 1, 8 };
+            List<int> Knights = new List<int>() { 2, 7 };
+            List<int> Bishops = new List<int>() { 3, 6 };
+            
+            foreach (var row in Rows)
+            {
+                foreach (var rook in Rooks)
+                {
+                    Position pos = new Position(row.Item1, rook);
+                    Rook newRook = new Rook(pos, row.Item2);
+                    ListOfPieces.Add(newRook);
+                }
+                foreach (var knight in Knights)
+                {
+                    Position pos = new Position(row.Item1, knight);
+                    Knight newKnight = new Knight(pos, row.Item2);
+                    ListOfPieces.Add(newKnight);
+                }
+                foreach (var bishop in Bishops)
+                {
+                    Position pos = new Position(row.Item1, bishop);
+                    Bishop newBishop = new Bishop(pos, row.Item2);
+                    ListOfPieces.Add(newBishop);
+                }
+             }
+            Position BQueenPos = new Position(4, 1);
+            Position BKingPos = new Position(5, 1);
+            Position WQueenPos = new Position(5, 8);
+            Position WKingPos = new Position(4, 8);
+
+            Queen BQueen = new Queen(BQueenPos, 1);
+            Queen WQueen = new Queen(WQueenPos, -1);
+            King BKing = new King(BKingPos, 1);
+            King WKing = new King(WKingPos, -1);
+
+            ListOfPieces.Add(BQueen);
+            ListOfPieces.Add(WQueen);
+            ListOfPieces.Add(BKing);
+            ListOfPieces.Add(WKing);
+
             return true;
         }
 
