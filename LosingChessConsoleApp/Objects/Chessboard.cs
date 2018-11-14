@@ -14,8 +14,37 @@ namespace LosingChessConsoleApp.Models
         {
 
         }
-
+        //I made the board as a list of positions... do we need to make it an array?
         int[,] ChessboardArray = new int[,] { };
+
+        List<Position> Squares = new List<Position>();
+        public bool CreateBoard()
+        {
+            for(int x = 1; x <= 8; ++x)
+            {
+                for(int y = 1; y <= 8; ++y)
+                {
+                    Position newPos = new Position(x, y);
+                    Squares.Add(newPos);
+                }
+            }
+            return true;
+        }
+
+        public bool SquareOccupied(Position pos)
+        {
+            bool returnval = false;
+
+            foreach (BasePiece piece in ListOfPieces)
+            {
+                if (pos == piece.Position)
+                {
+                    returnval = true;
+                    break;
+                }
+            }
+            return returnval;
+        }
 
         List<BasePiece> ListOfPieces = new List<BasePiece>();
 

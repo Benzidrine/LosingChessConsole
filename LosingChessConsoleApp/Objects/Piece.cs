@@ -39,21 +39,72 @@ namespace LosingChessConsoleApp.Models
         }
 
         public int Value;
-        public Position Position; //x y values for board position
+        public Position Position, NewPosition; //x y values for board position and position to move to
         public int Color;  // 1 for black, -1 for white
         public bool HasNotMoved = true;
+        public bool MustCapture = false;
+        public List<Position> Path;
 
         public BasePiece(Position Position, int Color)
         {            
 
         }
 
-        public virtual bool ValidMove(Position MoveTo) {
+        public virtual bool ValidMove()
+        {
             return false; 
         }
-        public virtual bool ValidCapture(Position MoveTo) {
+        public virtual bool ValidCapture()
+        {
             return false;
         }
+
+        public bool SetPath()
+        {
+            this.Path.Clear();
+            bool returnval = false;
+            //find number of squares between position and new position
+            Position diff = new Position();
+            diff.Diff(Position, NewPosition);
+            // find sign of x/y values in diff
+            Position sign = new Position();
+            sign.Sign(diff);
+
+            Position counter = new Position(Position);
+
+            while ((counter.X != NewPosition.X) && (counter.Y != NewPosition.Y))
+            {
+                counter.Add(sign);
+                if ((counter.X != NewPosition.X) && (counter.Y != NewPosition.Y))
+                {
+                    Path.Add(counter);
+                }
+            }
+            if (this.Path.Count() > 0)
+            {
+                returnval = true;
+            }
+            return returnval;
+        }
+
+        public bool PathIsClear(List<BasePiece> ListOfPieces)
+        {
+            bool returnval = true;
+            if (this.SetPath())
+            {
+                foreach (BasePiece piece in ListOfPieces)
+                {
+                    foreach (Position pos in Path)
+                        if (piece.Position == pos)
+                        { returnval = false; }
+                }
+            }
+            else { returnval = false; }
+            return returnval;
+        }
+
+        //todo - MovePiece() and  RemovePiece() to handle changing a pieces position on the board, 
+        // and removing a piece from the board after a capture.
     }
 
     public class Pawn : BasePiece
@@ -66,25 +117,25 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
 
-            if (Position.X == positionToMove.X)
+            if (Position.X == NewPosition.X)
             {
-                if ((Position.Y == (positionToMove.Y + 2 * Color)) && HasNotMoved) { returnval = true; }
-                else if (Position.Y == (positionToMove.Y + Color)) { returnval = true; }
+                if ((Position.Y == (NewPosition.Y + 2 * Color)) && HasNotMoved) { returnval = true; }
+                else if (Position.Y == (NewPosition.Y + Color)) { returnval = true; }
             }
 
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+        public override bool ValidCapture()
         {
             bool returnval = false;
-            if ((Position.X == positionToTake.X + 1) || (Position.X == positionToTake.X - 1))
+            if ((Position.X == NewPosition.X + 1) || (Position.X == NewPosition.X - 1))
             {
-                if (Position.Y == (positionToTake.Y + Color)) { returnval = true; }
+                if (Position.Y == (NewPosition.Y + Color)) { returnval = true; }
             }
             return returnval;
         }
@@ -101,20 +152,21 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
-            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
-            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(NewPosition.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(NewPosition.Y));
 
             if (xTestVal == yTestVal) { returnval = true; }
 
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+
+        public override bool ValidCapture()
         {
-            return this.ValidMove(positionToTake);  
+            return this.ValidMove();  
         }
     }
 
@@ -128,20 +180,20 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
-            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
-            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(NewPosition.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(NewPosition.Y));
 
             if ((xTestVal == 1 && yTestVal == 2) || (xTestVal == 1 && yTestVal == 2)) { returnval = true; }
 
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+        public override bool ValidCapture()
         {
-            return this.ValidMove(positionToTake);
+            return this.ValidMove();
         }
     }
 
@@ -155,20 +207,20 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
-            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
-            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(NewPosition.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(NewPosition.Y));
 
             if ((xTestVal == 0) || (yTestVal == 0)) { returnval = true; }
 
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+        public override bool ValidCapture()
         {
-            return this.ValidMove(positionToTake);
+            return this.ValidMove();
         }
     }
 
@@ -182,11 +234,11 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
-            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
-            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(NewPosition.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(NewPosition.Y));
 
             if (xTestVal == yTestVal) { returnval = true; }
             else if ((xTestVal == 0) || (yTestVal == 0)) { returnval = true; }
@@ -194,9 +246,9 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+        public override bool ValidCapture()
         {
-            return this.ValidMove(positionToTake);
+            return this.ValidMove();
         }
     }
 
@@ -210,20 +262,20 @@ namespace LosingChessConsoleApp.Models
 
         }
 
-        public override bool ValidMove(Position positionToMove)
+        public override bool ValidMove()
         {
             bool returnval = false;
-            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(positionToMove.X));
-            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(positionToMove.Y));
+            int xTestVal = Math.Abs(Math.Abs(Position.X) - Math.Abs(NewPosition.X));
+            int yTestVal = Math.Abs(Math.Abs(Position.Y) - Math.Abs(NewPosition.Y));
 
             if ((xTestVal == 1 && yTestVal == 1) || (xTestVal + yTestVal == 1)) { returnval = true; }
 
             return returnval;
         }
 
-        public override bool ValidCapture(Position positionToTake)
+        public override bool ValidCapture()
         {
-            return this.ValidMove(positionToTake);
+            return this.ValidMove();
         }
     }
 
