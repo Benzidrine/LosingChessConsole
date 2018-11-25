@@ -10,9 +10,9 @@ namespace LosingChessConsoleApp.Models
 
     public class BasePiece
     {
-        private string PieceName(int val)
+        private string PieceName(int Type)
         {
-            switch (val)
+            switch (Type)
             {
                 case 1: return "Pawn";
                 case 2: return "Bishop";
@@ -24,9 +24,9 @@ namespace LosingChessConsoleApp.Models
             }
         }
 
-        private int? PieceName(string val)
+        private int? PieceName(string Type)
         {
-            switch (val)
+            switch (Type)
             {
                 case "Pawn": return 1;
                 case "Bishop": return 2;
@@ -115,6 +115,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 1;
+            Type = 1;
 
         }
 
@@ -150,6 +151,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 3;
+            Type = 2;
 
         }
 
@@ -178,6 +180,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 3;
+            Type = 3;
 
         }
 
@@ -205,6 +208,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 5;
+            Type = 4;
 
         }
 
@@ -232,6 +236,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 10;
+            Type = 5;
 
         }
 
@@ -260,6 +265,7 @@ namespace LosingChessConsoleApp.Models
             Color = color;
             Position = position;
             Value = 100;
+            Type = 6;
 
         }
 
