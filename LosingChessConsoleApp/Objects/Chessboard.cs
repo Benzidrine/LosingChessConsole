@@ -78,19 +78,19 @@ namespace LosingChessConsoleApp.Models
             {
                 foreach (var rook in Rooks)
                 {
-                    Position pos = new Position(row.Item1, rook);
+                    Position pos = new Position(rook, row.Item1);
                     Rook newRook = new Rook(pos, row.Item2);
                     ListOfPieces.Add(newRook);
                 }
                 foreach (var knight in Knights)
                 {
-                    Position pos = new Position(row.Item1, knight);
+                    Position pos = new Position(knight, row.Item1);
                     Knight newKnight = new Knight(pos, row.Item2);
                     ListOfPieces.Add(newKnight);
                 }
                 foreach (var bishop in Bishops)
                 {
-                    Position pos = new Position(row.Item1, bishop);
+                    Position pos = new Position(bishop, row.Item1);
                     Bishop newBishop = new Bishop(pos, row.Item2);
                     ListOfPieces.Add(newBishop);
                 }

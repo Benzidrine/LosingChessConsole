@@ -26,8 +26,8 @@ namespace LosingChessConsoleApp.Management
                 {
                     if (p.Position.X == pos.X && p.Position.Y == pos.Y)
                     {
-                        //DisplayString += p.Type;
-                        DisplayString += "p";
+                        DisplayString += p.Type;
+                        //DisplayString += "p";
                         ContainsPiece = !ContainsPiece;
                     }
                 }
@@ -47,6 +47,18 @@ namespace LosingChessConsoleApp.Management
                 if (i == 9) i = 1;
             }
 
+            return DisplayString;
+        }
+
+
+        public static string PresentPieces(Chessboard chessboard)
+        {
+            string DisplayString = "";
+            foreach (BasePiece p in chessboard.ListOfPieces)
+            {
+                DisplayString += "Piece Name:" + p.Type + " Position X:" + p.Position.X + " Position Y:" + p.Position.Y + "\n";
+
+            }
             return DisplayString;
         }
     }
