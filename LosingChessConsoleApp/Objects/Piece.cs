@@ -38,6 +38,7 @@ namespace LosingChessConsoleApp.Models
             }
         }
 
+        public int Type;
         public int Value;
         public Position Position, NewPosition; //x y values for board position and position to move to
         public int Color;  // 1 for black, -1 for white
