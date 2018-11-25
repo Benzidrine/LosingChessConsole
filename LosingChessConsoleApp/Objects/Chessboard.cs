@@ -9,15 +9,17 @@ namespace LosingChessConsoleApp.Models
 {
     public class Chessboard
     {
+        List<Position> Squares = new List<Position>();
+        public List<BasePiece> ListOfPieces = new List<BasePiece>();
 
         public Chessboard()
         {
-
+            CreateBoard();
+            SetBoard();
         }
-        //I made the board as a list of positions... do we need to make it an array?
-        int[,] ChessboardArray = new int[,] { };
 
-        List<Position> Squares = new List<Position>();
+        public List<Position> _Squares { get { return Squares; } }
+
         public bool CreateBoard()
         {
             for(int x = 1; x <= 8; ++x)
@@ -46,7 +48,6 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
-        List<BasePiece> ListOfPieces = new List<BasePiece>();
 
         public bool IsOdd( int num)
         {
@@ -111,7 +112,7 @@ namespace LosingChessConsoleApp.Models
 
             return true;
         }
-
+        
         public  bool IsSquareBlack (int x, int y)
         {
             bool returnVal = false;

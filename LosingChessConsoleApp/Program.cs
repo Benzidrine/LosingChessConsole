@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LosingChessConsoleApp.Models;
+using LosingChessConsoleApp.Management;
 
 namespace LosingChessConsoleApp
 {
@@ -13,9 +14,13 @@ namespace LosingChessConsoleApp
         {
             Console.BackgroundColor = ConsoleColor.Blue;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine(UI.Welcome("Phil is a super Cunt"));
+
+            Chessboard chessboard = new Chessboard();
+
+            Console.Write(PresentationManager.PresentBoard(chessboard));
+
+
             Console.WriteLine("Press any key to exit.");
-            UI.testConsoleWriteLine();            
 
             Console.ReadKey();
         }

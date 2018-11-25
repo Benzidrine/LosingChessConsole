@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\PathingManager.cs" />
+    <Compile Include="Management\PresentationManager.cs" />
     <Compile Include="Objects\Chessboard.cs" />
     <Compile Include="Objects\Piece.cs" />
     <Compile Include="Objects\Position.cs" />
