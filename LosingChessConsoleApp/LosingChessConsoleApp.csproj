@@ -46,6 +46,7 @@
     <Compile Include="Management\PresentationManager.cs" />
     <Compile Include="Objects\Chessboard.cs" />
     <Compile Include="Objects\Piece.cs" />
+    <Compile Include="Objects\PieceColorEnum.cs" />
     <Compile Include="Objects\Position.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

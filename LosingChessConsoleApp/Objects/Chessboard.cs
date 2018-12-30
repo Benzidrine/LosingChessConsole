@@ -56,20 +56,22 @@ namespace LosingChessConsoleApp.Models
 
         public bool SetBoard()
         {
+            //Create and place black pawns
             for (int x = 1; x <= 8; ++x)
             {
                 Position pos = new Position(x, 2);
-                Pawn newPawn = new Pawn(pos, -1);
+                Pawn newPawn = new Pawn(pos, PieceColor.Black);
                 ListOfPieces.Add(newPawn);
             }
+            //Create and place white pawns
             for (int x = 1; x <= 8; ++x)
             {
                 Position pos = new Position(x, 7);
-                Pawn newPawn = new Pawn(pos, 1);
+                Pawn newPawn = new Pawn(pos, PieceColor.White);
                 ListOfPieces.Add(newPawn);
             }
             // row tuple (row, color)
-            var Rows = new List<Tuple<int, int>>() { Tuple.Create(1, 1), Tuple.Create(8, -1) };
+            var Rows = new List<Tuple<int, int>>() { Tuple.Create(1, PieceColor.White), Tuple.Create(8, PieceColor.Black) };
             List<int> Rooks = new List<int>() { 1, 8 };
             List<int> Knights = new List<int>() { 2, 7 };
             List<int> Bishops = new List<int>() { 3, 6 };
@@ -100,10 +102,10 @@ namespace LosingChessConsoleApp.Models
             Position WQueenPos = new Position(5, 8);
             Position WKingPos = new Position(4, 8);
 
-            Queen BQueen = new Queen(BQueenPos, 1);
-            Queen WQueen = new Queen(WQueenPos, -1);
-            King BKing = new King(BKingPos, 1);
-            King WKing = new King(WKingPos, -1);
+            Queen BQueen = new Queen(BQueenPos, PieceColor.White);
+            Queen WQueen = new Queen(WQueenPos, PieceColor.Black);
+            King BKing = new King(BKingPos, PieceColor.White);
+            King WKing = new King(WKingPos, PieceColor.Black);
 
             ListOfPieces.Add(BQueen);
             ListOfPieces.Add(WQueen);
