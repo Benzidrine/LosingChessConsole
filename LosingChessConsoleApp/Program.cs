@@ -19,6 +19,9 @@ namespace LosingChessConsoleApp
 
             Console.Write(PresentationManager.PresentBoard(chessboard));
 
+            InputManager im = new InputManager();
+
+            im.InputLoop(chessboard);
 
             Console.WriteLine("Press any key to exit.");
 

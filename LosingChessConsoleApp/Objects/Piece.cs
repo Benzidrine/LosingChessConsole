@@ -51,6 +51,39 @@ namespace LosingChessConsoleApp.Models
 
         }
 
+        public string letterExpression()
+        {
+            string letter = "Z";
+            switch (Type)
+            {
+                case 1:
+                    letter = "P";
+                    break;
+                case 2:
+                    letter = "B";
+                    break;
+                case 3:
+                    letter = "H";
+                    break;
+                case 4:
+                    letter = "R";
+                    break;
+                case 5:
+                    letter = "Q";
+                    break;
+                case 6:
+                    letter = "K";
+                    break;
+            }
+
+            if (Color == PieceColor.White)
+            {
+                letter = letter.ToLower();
+            }
+
+            return letter;
+        }
+
         public virtual bool ValidMove()
         {
             return false; 
@@ -125,8 +158,8 @@ namespace LosingChessConsoleApp.Models
 
             if (Position.X == NewPosition.X)
             {
-                if ((Position.Y == (NewPosition.Y + 2 * Color)) && HasNotMoved) { returnval = true; }
-                else if (Position.Y == (NewPosition.Y + Color)) { returnval = true; }
+                if ((NewPosition.Y == (Position.Y - 2 * Color)) && HasNotMoved) { returnval = true; }
+                else if (NewPosition.Y == (Position.Y - Color)) { returnval = true; }
             }
 
             return returnval;
@@ -137,7 +170,7 @@ namespace LosingChessConsoleApp.Models
             bool returnval = false;
             if ((Position.X == NewPosition.X + 1) || (Position.X == NewPosition.X - 1))
             {
-                if (Position.Y == (NewPosition.Y + Color)) { returnval = true; }
+                if (NewPosition.Y == (Position.Y - Color)) { returnval = true; }
             }
             return returnval;
         }

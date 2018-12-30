@@ -17,16 +17,24 @@ namespace LosingChessConsoleApp.Management
             if (chessboard.ListOfPieces.Count == 0) return DisplayString;
 
             int i = 1;
+            int RowCount = 8;
             List<Position> OrderedSquares = chessboard._Squares.OrderBy(c => c.X).ToList();
             OrderedSquares = chessboard._Squares.OrderBy(c => c.Y).ToList();
             foreach (Position pos in OrderedSquares)
             {
                 bool ContainsPiece = false;
+
+                if (i == 1)
+                {
+                    DisplayString += RowCount + " ";
+                    RowCount--;
+                }
+
                 foreach (BasePiece p in chessboard.ListOfPieces)
                 {
                     if (p.Position.X == pos.X && p.Position.Y == pos.Y)
                     {
-                        DisplayString += p.Type;
+                        DisplayString += p.letterExpression();
                         //DisplayString += "p";
                         ContainsPiece = !ContainsPiece;
                     }
@@ -46,6 +54,9 @@ namespace LosingChessConsoleApp.Management
                 if (i == 9) DisplayString += "\n";
                 if (i == 9) i = 1;
             }
+
+            //Last Row
+            DisplayString += "  ABCDEFGH\n";
 
             return DisplayString;
         }

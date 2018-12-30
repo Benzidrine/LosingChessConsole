@@ -33,6 +33,33 @@ namespace LosingChessConsoleApp.Models
             return true;
         }
 
+        public void movePiece(Position pos, Position newPos)
+        {
+            foreach (BasePiece piece in ListOfPieces)
+            {
+                if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
+                {
+                    piece.Position = newPos;
+                    break;
+                }
+            }
+        }
+
+        public BasePiece getPiece(Position pos)
+        {
+            BasePiece retPiece = new BasePiece(new Position(0,0),PieceColor.Black);
+
+            foreach (BasePiece piece in ListOfPieces)
+            {
+                if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
+                {
+                    retPiece = piece;
+                    break;
+                }
+            }
+            return retPiece;
+        }
+
         public bool SquareOccupied(Position pos)
         {
             bool returnval = false;
@@ -71,7 +98,7 @@ namespace LosingChessConsoleApp.Models
                 ListOfPieces.Add(newPawn);
             }
             // row tuple (row, color)
-            var Rows = new List<Tuple<int, int>>() { Tuple.Create(1, PieceColor.White), Tuple.Create(8, PieceColor.Black) };
+            var Rows = new List<Tuple<int, int>>() { Tuple.Create(1, PieceColor.Black), Tuple.Create(8, PieceColor.White) };
             List<int> Rooks = new List<int>() { 1, 8 };
             List<int> Knights = new List<int>() { 2, 7 };
             List<int> Bishops = new List<int>() { 3, 6 };
@@ -102,14 +129,14 @@ namespace LosingChessConsoleApp.Models
             Position WQueenPos = new Position(5, 8);
             Position WKingPos = new Position(4, 8);
 
-            Queen BQueen = new Queen(BQueenPos, PieceColor.White);
-            Queen WQueen = new Queen(WQueenPos, PieceColor.Black);
-            King BKing = new King(BKingPos, PieceColor.White);
-            King WKing = new King(WKingPos, PieceColor.Black);
+            Queen BQueen = new Queen(BQueenPos, PieceColor.Black);
+            King BKing = new King(BKingPos, PieceColor.Black);
+            Queen WQueen = new Queen(WQueenPos, PieceColor.White);
+            King WKing = new King(WKingPos, PieceColor.White);
 
             ListOfPieces.Add(BQueen);
-            ListOfPieces.Add(WQueen);
             ListOfPieces.Add(BKing);
+            ListOfPieces.Add(WQueen);
             ListOfPieces.Add(WKing);
 
             return true;
