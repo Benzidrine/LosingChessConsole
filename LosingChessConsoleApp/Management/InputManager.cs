@@ -45,7 +45,7 @@ namespace LosingChessConsoleApp.Management
                     {
                         Position toPosition = getPositionFromInputCode(LocationToMoveTo);
 
-                        var bp = castAsCorrectPiece(chessboard.getPiece(fromPosition));
+                        var bp = ExplicitCast.castAsCorrectPiece(chessboard.getPiece(fromPosition));
 
                         //todo better checking
                         if (bp.Position == new Position(0, 0))
@@ -76,17 +76,6 @@ namespace LosingChessConsoleApp.Management
             }
 
             return breakLoop;
-        }
-
-        public static dynamic castAsCorrectPiece(BasePiece bp)
-        {
-            if (bp.Type == 1) return (Pawn)bp;
-            if (bp.Type == 2) return (Bishop)bp;
-            if (bp.Type == 3) return (Knight)bp;
-            if (bp.Type == 4) return (Rook)bp;
-            if (bp.Type == 5) return (Queen)bp;
-            if (bp.Type == 6) return (King)bp;
-            return bp;
         }
 
         public static Position getPositionFromInputCode(string input)

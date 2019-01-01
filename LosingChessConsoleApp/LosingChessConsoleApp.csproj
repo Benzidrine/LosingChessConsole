@@ -42,6 +42,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Management\AI.cs" />
+    <Compile Include="Management\ExplicitCast.cs" />
     <Compile Include="Management\InputManager.cs" />
     <Compile Include="Management\PathingManager.cs" />
     <Compile Include="Management\PresentationManager.cs" />

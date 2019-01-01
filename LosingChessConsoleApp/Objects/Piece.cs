@@ -44,6 +44,7 @@ namespace LosingChessConsoleApp.Models
         public int Color;  // 1 for black, -1 for white
         public bool HasNotMoved = true;
         public bool MustCapture = false;
+        public bool HasBeenCaptured = false;
         public List<Position> Path;
 
         public BasePiece(Position Position, int Color)
@@ -89,6 +90,11 @@ namespace LosingChessConsoleApp.Models
             return false; 
         }
         public virtual bool ValidCapture()
+        {
+            return false;
+        }
+
+        public virtual bool ValidCaptureInjection(Position newpos)
         {
             return false;
         }
@@ -175,6 +181,11 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidCaptureInjection(Position newpos)
+        {
+            NewPosition = newpos;
+            return ValidCapture();
+        }
     }
 
     public class Bishop : BasePiece
