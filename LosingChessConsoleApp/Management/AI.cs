@@ -58,8 +58,10 @@ namespace LosingChessConsoleApp.Management
         
         private void MakeCaptureMove(Choice Decision, Chessboard chessboard)
         {
-            //todo: implement
-            // loop through and set piece to is captured then loop through and change position of aiPiece
+            // remove piece that is captured then loop through and change position of aiPiece
+            chessboard.ListOfPieces.RemoveAll(p => p.Position == Decision.New);
+            BasePiece sbp = chessboard.ListOfPieces.FirstOrDefault(p => p.Position == Decision.Original);
+            sbp.Position = Decision.New;
         }
     }
 }

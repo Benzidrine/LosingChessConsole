@@ -48,6 +48,7 @@
     <Compile Include="Management\PathingManager.cs" />
     <Compile Include="Management\PresentationManager.cs" />
     <Compile Include="Objects\Chessboard.cs" />
+    <Compile Include="Objects\Choice.cs" />
     <Compile Include="Objects\ColumnEnum.cs" />
     <Compile Include="Objects\Piece.cs" />
     <Compile Include="Objects\PieceColorEnum.cs" />

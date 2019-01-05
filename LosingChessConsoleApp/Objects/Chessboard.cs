@@ -35,6 +35,10 @@ namespace LosingChessConsoleApp.Models
 
         public void movePiece(Position pos, Position newPos)
         {
+            if (SquareOccupied(newPos))
+            {
+
+            }
             foreach (BasePiece piece in ListOfPieces)
             {
                 if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)

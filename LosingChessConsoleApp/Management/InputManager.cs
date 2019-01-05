@@ -9,11 +9,18 @@ namespace LosingChessConsoleApp.Management
 {
     public class InputManager
     {
+        private int _turn = 0;
+        private bool _moveMade = false;
+        private int _AIcolor = PieceColor.Black;
+
         public bool InputLoop(Chessboard chessboard)
         {
+            AI aI = new AI();
+            if (_moveMade) aI.MakeDecision(chessboard, _AIcolor);
+            _moveMade = false;
             bool breakLoop = false;
 
-            string input = cReadLine();
+            string input = cReadLine().ToUpper();
 
             if (input == "MOVE")
             {
@@ -61,12 +68,42 @@ namespace LosingChessConsoleApp.Management
                             bool validMove = bp.ValidMove();
                             if (validMove)
                             {
+                                _moveMade = !_moveMade;
                                 chessboard.movePiece(fromPosition, toPosition);
                             }
                         }
                     }
                 }
 
+                InputLoop(chessboard);
+            }
+            // MOVE A2 A3
+            else if (input.Contains("MOVE") && input.Length == 10)
+            {
+                string LocationOfPiece = input.Substring(5, 2);
+                string LocationToMoveTo = input.Substring(8, 2);
+                Position fromPosition = getPositionFromInputCode(LocationOfPiece);
+                Position toPosition = getPositionFromInputCode(LocationToMoveTo);
+
+                var bp = ExplicitCast.castAsCorrectPiece(chessboard.getPiece(fromPosition));
+
+                if (bp.Position == new Position(0, 0))
+                {
+                    Console.WriteLine("No!");
+                    return breakLoop;
+                }
+                else
+                {
+                    bp.NewPosition = toPosition;
+                    //todo check if piece exists in space and can be captured then run capture code instead of move code
+                    //ie getpiece from toPosition then check color then validCapture instead
+                    bool validMove = bp.ValidMove();
+                    if (validMove)
+                    {
+                        _moveMade = !_moveMade;
+                        chessboard.movePiece(fromPosition, toPosition);
+                    }
+                }
                 InputLoop(chessboard);
             }
             else if (input == "PRESENT")
