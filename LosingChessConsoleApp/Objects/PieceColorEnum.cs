@@ -11,5 +11,6 @@ namespace LosingChessConsoleApp.Models
     {
         public const int Black = -1;
         public const int White = 1;
+
     }
 }

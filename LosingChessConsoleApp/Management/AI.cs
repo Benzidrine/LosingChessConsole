@@ -14,6 +14,14 @@ namespace LosingChessConsoleApp.Management
             bool MadeMove = false;
 
             MadeMove = EnforcedMove(MadeMove, chessboard, AIColor);
+            if (MadeMove == false)
+            {
+                MadeMove = MakeMove(MadeMove, chessboard, AIColor);
+            }
+        }
+
+        public bool MakeMove(bool MadeMove, Chessboard chessboard, int AIColor)
+        {
         }
 
         public bool EnforcedMove(bool MadeMove, Chessboard chessboard, int AIColor)
@@ -32,7 +40,7 @@ namespace LosingChessConsoleApp.Management
                 var castPiece = ExplicitCast.castAsCorrectPiece(bp);
                 foreach (BasePiece pp in Playerpieces)
                 {
-                    if (castPiece.ValidCaptureInjection(pp.Position))
+                    if (castPiece.ValidCaptureInjection(pp.Position, chessboard.ListOfPieces))
                     {
                         //New Choice
                         Choice ch = new Choice();

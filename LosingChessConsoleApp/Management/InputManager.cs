@@ -68,12 +68,12 @@ namespace LosingChessConsoleApp.Management
                             bool validMove = bp.ValidMove();
                             if (validMove)
                             {
-                                _moveMade = !_moveMade;
-                                chessboard.movePiece(fromPosition, toPosition);
+                                if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
                             }
                         }
                     }
                 }
+                if (!_moveMade) Console.WriteLine("Illegal Move");
 
                 InputLoop(chessboard);
             }
@@ -100,18 +100,41 @@ namespace LosingChessConsoleApp.Management
                     bool validMove = bp.ValidMove();
                     if (validMove)
                     {
-                        _moveMade = !_moveMade;
-                        chessboard.movePiece(fromPosition, toPosition);
+                        if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
                     }
+                }
+                if (!_moveMade) Console.WriteLine("Illegal Move");
+                InputLoop(chessboard);
+            }
+            else if (input == "LIST")
+            {
+                List<BasePiece> ListOfBasePieces = chessboard.ListOfPieces;
+                ListOfBasePieces.OrderBy(x => x.Position.Y).OrderBy(x => x.Position.Y);
+                foreach (BasePiece bp in ListOfBasePieces)
+                {
+                    Console.WriteLine("Name: " + bp.ColorIs() + " " + ((BasePiece.PieceName)bp.Type).ToString() + " Position: " + ((ColumnEnum.Letter)bp.Position.X).ToString() + " " + (9 - bp.Position.Y));
                 }
                 InputLoop(chessboard);
             }
-            else if (input == "PRESENT")
+            else if (input == "PRESENT" || input == "P")
             {
                 Console.WriteLine(PresentationManager.PresentBoard(chessboard));
                 InputLoop(chessboard);
             }
-
+            else if (input == "RESET")
+            {
+                chessboard = new Chessboard();
+                InputLoop(chessboard);
+            }
+            else if (input == "EXIT")
+            {
+                return breakLoop;
+            }
+            else
+            {
+                Console.WriteLine("ILLEGAL COMMAND");
+                InputLoop(chessboard);
+            }
             return breakLoop;
         }
 

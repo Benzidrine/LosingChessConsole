@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LosingChessConsoleApp.Models;
+using LosingChessConsoleApp.Management;
 
 namespace LosingChessConsoleApp.Models
 {
@@ -33,20 +34,50 @@ namespace LosingChessConsoleApp.Models
             return true;
         }
 
-        public void movePiece(Position pos, Position newPos)
+        public bool movePiece(Position pos, Position newPos)
         {
+            bool MoveMade = false;
+            List<BasePiece> NewListOfPieces = ListOfPieces;
+
             if (SquareOccupied(newPos))
             {
-
-            }
-            foreach (BasePiece piece in ListOfPieces)
-            {
-                if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
+                foreach (BasePiece piece in ListOfPieces)
                 {
-                    piece.Position = newPos;
-                    break;
+                    if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
+                    {
+                        var CastPiece = ExplicitCast.castAsCorrectPiece(piece);
+                        bool isValid = CastPiece.ValidCaptureInjection(newPos, ListOfPieces);
+                        if (isValid)
+                        {
+                            //Set Captured Piece For Removal
+                            foreach (BasePiece RemovedPiece in ListOfPieces)
+                            {
+                                if (RemovedPiece.Position.X == newPos.X && RemovedPiece.Position.Y == newPos.Y) RemovedPiece.HasBeenCaptured = true;
+                            }
+                            piece.Position = newPos;
+                            MoveMade = true;
+                        }
+                    }
                 }
             }
+            else
+            {
+                foreach (BasePiece piece in ListOfPieces)
+                {
+                    if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
+                    {
+                        var CastPiece = ExplicitCast.castAsCorrectPiece(piece);
+                        bool isValid = CastPiece.ValidMoveInjection(newPos, ListOfPieces);
+                        if (isValid)
+                        {
+                            piece.Position = newPos;
+                            MoveMade = true;
+                        }
+                    }
+                }
+            }
+            ListOfPieces.RemoveAll(x => x.HasBeenCaptured);
+            return MoveMade;
         }
 
         public BasePiece getPiece(Position pos)
@@ -70,7 +101,7 @@ namespace LosingChessConsoleApp.Models
 
             foreach (BasePiece piece in ListOfPieces)
             {
-                if (pos == piece.Position)
+                if (pos.X == piece.Position.X && pos.Y == piece.Position.Y)
                 {
                     returnval = true;
                     break;

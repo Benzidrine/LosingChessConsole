@@ -10,33 +10,7 @@ namespace LosingChessConsoleApp.Models
 
     public class BasePiece
     {
-        private string PieceName(int Type)
-        {
-            switch (Type)
-            {
-                case 1: return "Pawn";
-                case 2: return "Bishop";
-                case 3: return "Knight";
-                case 4: return "Rook";
-                case 5: return "Queen";
-                case 6: return "King";
-                default: return null;
-            }
-        }
-
-        private int? PieceName(string Type)
-        {
-            switch (Type)
-            {
-                case "Pawn": return 1;
-                case "Bishop": return 2;
-                case "Knight": return 3;
-                case "Rook": return 4;
-                case "Queen": return 5;
-                case "King": return 6;
-                default: return null;
-            }
-        }
+        public enum PieceName { Pawn = 1, Bishop, Knight, Rook, Queen, King };
 
         public int Type;
         public int Value;
@@ -47,9 +21,15 @@ namespace LosingChessConsoleApp.Models
         public bool HasBeenCaptured = false;
         public List<Position> Path;
 
-        public BasePiece(Position Position, int Color)
-        {            
+        public string ColorIs()
+        {
+            if (Color == -1) return "Black";
+            return "White";
+        }
 
+        public BasePiece(Position Position, int Color)
+        {
+            Path = new List<Position>();
         }
 
         public string letterExpression()
@@ -87,21 +67,27 @@ namespace LosingChessConsoleApp.Models
 
         public virtual bool ValidMove()
         {
-            return false; 
+            return false;
         }
+
+        public virtual bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            return false;
+        }
+
         public virtual bool ValidCapture()
         {
             return false;
         }
 
-        public virtual bool ValidCaptureInjection(Position newpos)
+        public virtual bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
         {
             return false;
         }
 
         public bool SetPath()
         {
-            this.Path.Clear();
+            Path.Clear();
             bool returnval = false;
             //find number of squares between position and new position
             Position diff = new Position();
@@ -127,19 +113,55 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
-        public bool PathIsClear(List<BasePiece> ListOfPieces)
+        public bool PathIsClear(List<BasePiece> ListOfPieces, Position StartPos, Position EndPos)
         {
-            bool returnval = true;
-            if (this.SetPath())
+            bool returnval = false;
+            string type = "";
+            if (StartPos.X == EndPos.X && StartPos.Y != EndPos.Y) type = "Vertical";
+            if (StartPos.X != EndPos.X && StartPos.Y == EndPos.Y) type = "Horizontal";
+            if (StartPos.X != EndPos.X && StartPos.Y != EndPos.Y) type = "Diagonal";
+            if (type == "Vertical")
             {
-                foreach (BasePiece piece in ListOfPieces)
+                int sign = Math.Sign(EndPos.Y - StartPos.Y);
+                for (int i = 1; i < 10; i++)
                 {
-                    foreach (Position pos in Path)
-                        if (piece.Position == pos)
-                        { returnval = false; }
+                    if (StartPos.Y + (sign * i) == EndPos.Y) return true;
+                    foreach (BasePiece bp in ListOfPieces)
+                    {
+                        if (bp.Position.X == StartPos.X && bp.Position.Y == (StartPos.Y + (sign * i))) return false;
+                    }
                 }
             }
-            else { returnval = false; }
+            if (type == "Horizontal")
+            {
+                int sign = Math.Sign(EndPos.X - StartPos.X);
+                for (int i = 1; i < 10; i++)
+                {
+                    if (StartPos.X + (sign * i) == EndPos.X) return true;
+                    foreach (BasePiece bp in ListOfPieces)
+                    {
+                        if (bp.Position.Y == StartPos.Y && bp.Position.X == (StartPos.X + (sign * i))) return false;
+                    }
+                }
+            }
+            if (type == "Diagonal")
+            {
+
+                int signX = Math.Sign(EndPos.X - StartPos.X);
+                int signY = Math.Sign(EndPos.Y - StartPos.Y);
+
+                //(7,7) (8,6) 7 - 8 == 7 - 6
+                //Check if truly 45 degree diagonal
+                if (Math.Abs(StartPos.X - EndPos.X) != Math.Abs(StartPos.Y - EndPos.Y)) return false;
+                for (int i = 1; i < 10; i++)
+                {
+                    if (StartPos.X + (signX * i) == EndPos.X && StartPos.Y + (signY * i) == EndPos.Y) return true;
+                    foreach (BasePiece bp in ListOfPieces)
+                    {
+                        if (bp.Position.Y == (StartPos.Y + (signY * i)) && bp.Position.X == (StartPos.X + (signX * i))) return false;
+                    }
+                }
+            }
             return returnval;
         }
 
@@ -171,6 +193,12 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            return this.ValidMove();
+        }
+
         public override bool ValidCapture()
         {
             bool returnval = false;
@@ -181,7 +209,7 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
-        public override bool ValidCaptureInjection(Position newpos)
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
         {
             NewPosition = newpos;
             return ValidCapture();
@@ -210,10 +238,23 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            return this.ValidMove();
+        }
 
         public override bool ValidCapture()
         {
-            return this.ValidMove();  
+            return this.ValidMove();
+        }
+
+
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            NewPosition = newpos;
+            if (!PathIsClear(ListOfPieces,Position,newpos)) return false;
+            return this.ValidMove();
         }
     }
 
@@ -239,8 +280,19 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            return this.ValidMove();
+        }
+
         public override bool ValidCapture()
         {
+            return this.ValidMove();
+        }
+
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            NewPosition = newpos;
             return this.ValidMove();
         }
     }
@@ -267,8 +319,21 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            return this.ValidMove();
+        }
+
         public override bool ValidCapture()
         {
+            return this.ValidMove();
+        }
+
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            NewPosition = newpos;
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
             return this.ValidMove();
         }
     }
@@ -296,8 +361,21 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            return this.ValidMove();
+        }
+
         public override bool ValidCapture()
         {
+            return this.ValidMove();
+        }
+
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            NewPosition = newpos;
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
             return this.ValidMove();
         }
     }
@@ -324,8 +402,21 @@ namespace LosingChessConsoleApp.Models
             return returnval;
         }
 
+        public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            return this.ValidMove();
+        }
+
         public override bool ValidCapture()
         {
+            return this.ValidMove();
+        }
+
+        public override bool ValidCaptureInjection(Position newpos, List<BasePiece> ListOfPieces)
+        {
+            NewPosition = newpos;
+            if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
             return this.ValidMove();
         }
     }

@@ -8,7 +8,9 @@ namespace LosingChessConsoleApp.Models
 {
     public class ColumnEnum
     {
-        public static int returnInt(string letter)
+    public enum Letter  {A = 1,B,C,D,E,F,G,H};
+
+    public static int returnInt(string letter)
         {
             int ret = -1;
             letter = letter.ToLower();
