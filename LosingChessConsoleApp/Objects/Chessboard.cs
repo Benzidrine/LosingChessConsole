@@ -12,6 +12,7 @@ namespace LosingChessConsoleApp.Models
     {
         List<Position> Squares = new List<Position>();
         public List<BasePiece> ListOfPieces = new List<BasePiece>();
+        private int IDAssign = 1;
 
         public Chessboard()
         {
@@ -55,6 +56,7 @@ namespace LosingChessConsoleApp.Models
                                 if (RemovedPiece.Position.X == newPos.X && RemovedPiece.Position.Y == newPos.Y) RemovedPiece.HasBeenCaptured = true;
                             }
                             piece.Position = newPos;
+                            piece.HasNotMoved = false;
                             MoveMade = true;
                         }
                     }
@@ -82,7 +84,7 @@ namespace LosingChessConsoleApp.Models
 
         public BasePiece getPiece(Position pos)
         {
-            BasePiece retPiece = new BasePiece(new Position(0,0),PieceColor.Black);
+            BasePiece retPiece = new BasePiece(-1,new Position(0,0),PieceColor.Black);
 
             foreach (BasePiece piece in ListOfPieces)
             {
@@ -122,14 +124,14 @@ namespace LosingChessConsoleApp.Models
             for (int x = 1; x <= 8; ++x)
             {
                 Position pos = new Position(x, 2);
-                Pawn newPawn = new Pawn(pos, PieceColor.Black);
+                Pawn newPawn = new Pawn(IDAssign++, pos, PieceColor.Black);
                 ListOfPieces.Add(newPawn);
             }
             //Create and place white pawns
             for (int x = 1; x <= 8; ++x)
             {
                 Position pos = new Position(x, 7);
-                Pawn newPawn = new Pawn(pos, PieceColor.White);
+                Pawn newPawn = new Pawn(IDAssign++, pos, PieceColor.White);
                 ListOfPieces.Add(newPawn);
             }
             // row tuple (row, color)
@@ -143,19 +145,19 @@ namespace LosingChessConsoleApp.Models
                 foreach (var rook in Rooks)
                 {
                     Position pos = new Position(rook, row.Item1);
-                    Rook newRook = new Rook(pos, row.Item2);
+                    Rook newRook = new Rook(IDAssign++, pos, row.Item2);
                     ListOfPieces.Add(newRook);
                 }
                 foreach (var knight in Knights)
                 {
                     Position pos = new Position(knight, row.Item1);
-                    Knight newKnight = new Knight(pos, row.Item2);
+                    Knight newKnight = new Knight(IDAssign++, pos, row.Item2);
                     ListOfPieces.Add(newKnight);
                 }
                 foreach (var bishop in Bishops)
                 {
                     Position pos = new Position(bishop, row.Item1);
-                    Bishop newBishop = new Bishop(pos, row.Item2);
+                    Bishop newBishop = new Bishop(IDAssign++,pos, row.Item2);
                     ListOfPieces.Add(newBishop);
                 }
              }
@@ -164,10 +166,10 @@ namespace LosingChessConsoleApp.Models
             Position WQueenPos = new Position(5, 8);
             Position WKingPos = new Position(4, 8);
 
-            Queen BQueen = new Queen(BQueenPos, PieceColor.Black);
-            King BKing = new King(BKingPos, PieceColor.Black);
-            Queen WQueen = new Queen(WQueenPos, PieceColor.White);
-            King WKing = new King(WKingPos, PieceColor.White);
+            Queen BQueen = new Queen(IDAssign++, BQueenPos, PieceColor.Black);
+            King BKing = new King(IDAssign++, BKingPos, PieceColor.Black);
+            Queen WQueen = new Queen(IDAssign++, WQueenPos, PieceColor.White);
+            King WKing = new King(IDAssign++, WKingPos, PieceColor.White);
 
             ListOfPieces.Add(BQueen);
             ListOfPieces.Add(BKing);

@@ -59,7 +59,16 @@ namespace LosingChessConsoleApp.Models
             
         }
 
+        public bool WithinBounds()
+        {
+            if (X > 8 || X < 1 || Y > 8 || Y < 1) return false;
+            return true;
+        }
+
         public int X { get; set; }
-        public int Y { get; set; }
+        public int Y {
+            get;
+            set;
+        }
     }
 }

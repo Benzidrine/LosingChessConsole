@@ -12,9 +12,11 @@ namespace LosingChessConsoleApp.Models
     {
         public enum PieceName { Pawn = 1, Bishop, Knight, Rook, Queen, King };
 
+        public int ID;
         public int Type;
         public int Value;
-        public Position Position, NewPosition; //x y values for board position and position to move to
+        public Position Position;
+        public Position NewPosition; //x y values for board position and position to move to
         public int Color;  // 1 for black, -1 for white
         public bool HasNotMoved = true;
         public bool MustCapture = false;
@@ -27,8 +29,9 @@ namespace LosingChessConsoleApp.Models
             return "White";
         }
 
-        public BasePiece(Position Position, int Color)
+        public BasePiece(int ID, Position Position, int Color)
         {
+            NewPosition = new Position();
             Path = new List<Position>();
         }
 
@@ -63,6 +66,11 @@ namespace LosingChessConsoleApp.Models
             }
 
             return letter;
+        }
+
+        public virtual bool CanMove(Chessboard chessboard)
+        {
+            return false;
         }
 
         public virtual bool ValidMove()
@@ -171,13 +179,24 @@ namespace LosingChessConsoleApp.Models
 
     public class Pawn : BasePiece
     {
-        public Pawn(Position position, int color) : base(position, color)
+        public Pawn(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0,0);
             Value = 1;
             Type = 1;
 
+        }
+
+        public override bool CanMove(Chessboard chessboard)
+        {
+            Position TestPos = new Position();
+            TestPos.Y = (Position.Y - Color);
+            TestPos.X = (Position.X);
+            if (chessboard.SquareOccupied(TestPos) || !TestPos.WithinBounds()) return false;
+            return true;
         }
 
         public override bool ValidMove()
@@ -218,13 +237,34 @@ namespace LosingChessConsoleApp.Models
 
     public class Bishop : BasePiece
     {
-        public Bishop(Position position, int color) : base(position, color)
+        public Bishop(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0, 0);
             Value = 3;
             Type = 2;
 
+        }
+
+        public override bool CanMove(Chessboard chessboard)
+        {
+            Position testPosition = new Position();
+            //Check Square in four diagonal axis
+            testPosition.Y = (Position.Y + 1);
+            testPosition.X = (Position.X + 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y + 1);
+            testPosition.X = (Position.X - 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y - 1);
+            testPosition.X = (Position.X - 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y - 1);
+            testPosition.X = (Position.X + 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            return false;
         }
 
         public override bool ValidMove()
@@ -260,13 +300,47 @@ namespace LosingChessConsoleApp.Models
 
     public class Knight : BasePiece
     {
-        public Knight(Position position, int color) : base(position, color)
+        public Knight(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0, 0);
             Value = 3;
             Type = 3;
 
+        }
+
+
+        public override bool CanMove(Chessboard chessboard)
+        {
+            Position testPosition = new Position();
+            //Check Every Square Possible... Sigh
+            testPosition.X = Position.X + 2;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y + 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y - 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 2;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X + 2;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y - 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 2;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y + 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            return false;
         }
 
         public override bool ValidMove()
@@ -299,13 +373,34 @@ namespace LosingChessConsoleApp.Models
 
     public class Rook : BasePiece
     {
-        public Rook(Position position, int color) : base(position, color)
+        public Rook(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0, 0);
             Value = 5;
             Type = 4;
 
+        }
+
+        public override bool CanMove(Chessboard chessboard)
+        {
+            //Check Square in four adjacent axis
+            Position testPosition = new Position();
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            return false;
         }
 
         public override bool ValidMove()
@@ -340,13 +435,46 @@ namespace LosingChessConsoleApp.Models
 
     public class Queen : BasePiece
     {
-        public Queen(Position position, int color) : base(position, color)
+        public Queen(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0, 0);
             Value = 10;
             Type = 5;
 
+        }
+        public override bool CanMove(Chessboard chessboard)
+        {
+            Position testPosition = new Position();
+            //Check Square in four adjacent axis
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            //Check Square in four diagonal axis
+            testPosition.Y = (Position.Y + 1);
+            testPosition.X = (Position.X + 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y + 1);
+            testPosition.X = (Position.X - 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y - 1);
+            testPosition.X = (Position.X - 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.Y = (Position.Y - 1);
+            testPosition.X = (Position.X + 1);
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            return false;
         }
 
         public override bool ValidMove()
@@ -382,13 +510,32 @@ namespace LosingChessConsoleApp.Models
 
     public class King : BasePiece
     {
-        public King(Position position, int color) : base(position, color)
+        public King(int id, Position position, int color) : base(id, position, color)
         {
+            ID = id;
             Color = color;
             Position = position;
+            NewPosition = new Position(0, 0);
             Value = 100;
             Type = 6;
+        }
 
+        public override bool CanMove(Chessboard chessboard)
+        {
+            Position testPosition = new Position();
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return true;
+            return false;
         }
 
         public override bool ValidMove()

@@ -13,7 +13,9 @@ namespace LosingChessConsoleApp.Management
         {
             bool MadeMove = false;
 
+            //Check if AI must take a piece
             MadeMove = EnforcedMove(MadeMove, chessboard, AIColor);
+            //If AI doesn't have to take then make a move
             if (MadeMove == false)
             {
                 MadeMove = MakeMove(MadeMove, chessboard, AIColor);
@@ -22,6 +24,21 @@ namespace LosingChessConsoleApp.Management
 
         public bool MakeMove(bool MadeMove, Chessboard chessboard, int AIColor)
         {
+            List<int> IDsThatCanMove = new List<int>();
+
+            //Take out captured pieces
+            List<BasePiece> AIpieces = chessboard.ListOfPieces.Where(x => x.HasBeenCaptured == false).ToList();
+            //Take out all but AI controlled pieces
+            AIpieces = chessboard.ListOfPieces.Where(x => x.Color == AIColor).ToList();
+
+            foreach(BasePiece bp in AIpieces)
+            {
+                var castPiece = ExplicitCast.castAsCorrectPiece(bp);
+                if (castPiece.CanMove(chessboard)) IDsThatCanMove.Add(bp.ID);
+            }
+
+
+            return true;
         }
 
         public bool EnforcedMove(bool MadeMove, Chessboard chessboard, int AIColor)
@@ -69,6 +86,7 @@ namespace LosingChessConsoleApp.Management
             // remove piece that is captured then loop through and change position of aiPiece
             chessboard.ListOfPieces.RemoveAll(p => p.Position == Decision.New);
             BasePiece sbp = chessboard.ListOfPieces.FirstOrDefault(p => p.Position == Decision.Original);
+            sbp.HasNotMoved = false;
             sbp.Position = Decision.New;
         }
     }
