@@ -93,6 +93,11 @@ namespace LosingChessConsoleApp.Models
             return false;
         }
 
+        public virtual Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            return new Position();
+        }
+
         public bool SetPath()
         {
             Path.Clear();
@@ -199,6 +204,21 @@ namespace LosingChessConsoleApp.Models
             return true;
         }
 
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            Position NewPos = new Position();
+            if (HasNotMoved)
+            {
+                NewPos.Y = (Position.Y - (Color * 2));
+                NewPos.X = (Position.X);
+                if (!chessboard.SquareOccupied(NewPos) || NewPos.WithinBounds()) return NewPos;
+            }
+            NewPos.Y = (Position.Y - Color);
+            NewPos.X = (Position.X);
+            if (!chessboard.SquareOccupied(NewPos) || NewPos.WithinBounds()) return NewPos;
+            return new Position();
+        }
+
         public override bool ValidMove()
         {
             bool returnval = false;
@@ -215,6 +235,7 @@ namespace LosingChessConsoleApp.Models
         public override bool ValidMoveInjection(Position newpos, List<BasePiece> ListOfPieces)
         {
             if (!PathIsClear(ListOfPieces, Position, newpos)) return false;
+            NewPosition = newpos;
             return this.ValidMove();
         }
 

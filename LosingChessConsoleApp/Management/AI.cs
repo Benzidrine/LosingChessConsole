@@ -25,18 +25,28 @@ namespace LosingChessConsoleApp.Management
         public bool MakeMove(bool MadeMove, Chessboard chessboard, int AIColor)
         {
             List<int> IDsThatCanMove = new List<int>();
+            List<BasePiece> AIpiecesThatCanMove = new List<BasePiece>();
 
             //Take out captured pieces
-            List<BasePiece> AIpieces = chessboard.ListOfPieces.Where(x => x.HasBeenCaptured == false).ToList();
+            List <BasePiece> AIpieces = chessboard.ListOfPieces.Where(x => x.HasBeenCaptured == false).ToList();
             //Take out all but AI controlled pieces
             AIpieces = chessboard.ListOfPieces.Where(x => x.Color == AIColor).ToList();
 
             foreach(BasePiece bp in AIpieces)
             {
                 var castPiece = ExplicitCast.castAsCorrectPiece(bp);
-                if (castPiece.CanMove(chessboard)) IDsThatCanMove.Add(bp.ID);
+                if (castPiece.CanMove(chessboard)) AIpiecesThatCanMove.Add(bp);
             }
 
+            if (AIpiecesThatCanMove.Count() == 0) return false;
+
+            AIpiecesThatCanMove.OrderBy(x => x.Value);
+
+            Position pos = AIpiecesThatCanMove[0].Position;
+            Position newpos = AIpiecesThatCanMove[0].LongestPositionToMoveTo(chessboard);
+            int id = AIpiecesThatCanMove[0].ID;
+
+            chessboard.movePiece(pos, newpos);
 
             return true;
         }
@@ -57,7 +67,8 @@ namespace LosingChessConsoleApp.Management
                 var castPiece = ExplicitCast.castAsCorrectPiece(bp);
                 foreach (BasePiece pp in Playerpieces)
                 {
-                    if (castPiece.ValidCaptureInjection(pp.Position, chessboard.ListOfPieces))
+                    Position InjectPosition = pp.Position;
+                    if (castPiece.ValidCaptureInjection(InjectPosition, chessboard.ListOfPieces))
                     {
                         //New Choice
                         Choice ch = new Choice();
