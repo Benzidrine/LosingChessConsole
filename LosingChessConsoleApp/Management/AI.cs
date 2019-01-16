@@ -9,7 +9,7 @@ namespace LosingChessConsoleApp.Management
 {
     public class AI
     {
-        public void MakeDecision(Chessboard chessboard, int AIColor)
+        public bool MakeDecision(Chessboard chessboard, int AIColor)
         {
             bool MadeMove = false;
 
@@ -20,6 +20,8 @@ namespace LosingChessConsoleApp.Management
             {
                 MadeMove = MakeMove(MadeMove, chessboard, AIColor);
             }
+
+            return MadeMove;
         }
 
         public bool MakeMove(bool MadeMove, Chessboard chessboard, int AIColor)

@@ -72,5 +72,14 @@ namespace LosingChessConsoleApp.Management
             }
             return DisplayString;
         }
+        
+        public static void HelpMessage()
+        {
+            Console.WriteLine("Commands:");
+            Console.WriteLine("MOVE -- -- <- This command moves from one position to another, for example: MOVE A2 A3");
+            Console.WriteLine("RESET <- This command resets the board");
+            Console.WriteLine("PRESENT <- Show current board layout");
+            Console.WriteLine("EXIT <- Leave game");
+        }
     }
 }

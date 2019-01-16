@@ -15,10 +15,46 @@ namespace LosingChessConsoleApp.Management
 
         public bool InputLoop(Chessboard chessboard)
         {
+            //Check if won
+            if (chessboard.ListOfPieces.Where(x => x.Color == _AIcolor && x.HasBeenCaptured == false).Count() == 0)
+            {
+                Console.WriteLine("You have achieved a great victory over the odds to become a true chess god of absolute greatness");
+            }
+
+            //Check if lost
+            if (chessboard.ListOfPieces.Where(x => x.Color != _AIcolor && x.HasBeenCaptured == false).Count() == 0)
+            {
+                Console.WriteLine("You have lost sorry");
+            }
+
+            //AI responds to move
+            bool AImoved = false;
             AI aI = new AI();
-            if (_moveMade) aI.MakeDecision(chessboard, _AIcolor);
+            if (_moveMade) AImoved = aI.MakeDecision(chessboard, _AIcolor);
+
+            //Check if stalemate
+            if (_moveMade && !AImoved)
+            {
+                Console.WriteLine("Unfortunately your hopes have been dashed via a stalemate");
+            }
+
+            //Show board after player and AI move
+            if (_moveMade) Console.WriteLine(PresentationManager.PresentBoard(chessboard));
+
+            //Reset variables
             _moveMade = false;
             bool breakLoop = false;
+
+            //Check if player must move to capture a piece
+            List<Choice> Decisions = Player.EnforcedMove(chessboard, _AIcolor);
+            if (Decisions.Count > 0)
+            {
+                Console.WriteLine("Player must move to capture:");
+                foreach (Choice c in Decisions)
+                {
+                    Console.WriteLine("MOVE " + getInputCodeFromPosition(c.Original) + " " + getInputCodeFromPosition(c.New));
+                }
+            }
 
             string input = cReadLine().ToUpper();
 
@@ -70,6 +106,10 @@ namespace LosingChessConsoleApp.Management
                             {
                                 if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
                             }
+                            else if (bp.ValidCapture() && chessboard.SquareOccupied(toPosition))
+                            {
+                                if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
+                            }
                         }
                     }
                 }
@@ -102,6 +142,10 @@ namespace LosingChessConsoleApp.Management
                     {
                         if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
                     }
+                    else if (bp.ValidCapture() && chessboard.SquareOccupied(toPosition))
+                    {
+                        if (chessboard.movePiece(fromPosition, toPosition)) _moveMade = !_moveMade;
+                    }
                 }
                 if (!_moveMade) Console.WriteLine("Illegal Move");
                 InputLoop(chessboard);
@@ -129,6 +173,11 @@ namespace LosingChessConsoleApp.Management
             else if (input == "EXIT")
             {
                 return breakLoop;
+            }
+            else if (input == "HELP" || input == "?")
+            {
+                PresentationManager.HelpMessage();
+                InputLoop(chessboard);
             }
             else
             {
@@ -166,6 +215,13 @@ namespace LosingChessConsoleApp.Management
             pos.Y = numberOfRow;
 
             return pos;
+        }
+
+        public string getInputCodeFromPosition(Position pos)
+        {
+            string Letter = ((ColumnEnum.Letter)pos.X).ToString();
+            string NumberRow = (9 - pos.Y).ToString();
+            return Letter + NumberRow;
         }
 
         public static string cReadLine()

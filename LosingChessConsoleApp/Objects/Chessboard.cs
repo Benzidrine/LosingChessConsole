@@ -73,6 +73,7 @@ namespace LosingChessConsoleApp.Models
                         if (isValid)
                         {
                             piece.Position = newPos;
+                            piece.HasNotMoved = false;
                             MoveMade = true;
                         }
                     }

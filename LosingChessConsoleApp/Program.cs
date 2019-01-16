@@ -17,6 +17,7 @@ namespace LosingChessConsoleApp
 
             Chessboard chessboard = new Chessboard();
 
+            PresentationManager.HelpMessage();
             Console.Write(PresentationManager.PresentBoard(chessboard));
 
             InputManager im = new InputManager();

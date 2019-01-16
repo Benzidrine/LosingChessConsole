@@ -200,7 +200,7 @@ namespace LosingChessConsoleApp.Models
             Position TestPos = new Position();
             TestPos.Y = (Position.Y - Color);
             TestPos.X = (Position.X);
-            if (chessboard.SquareOccupied(TestPos) || !TestPos.WithinBounds()) return false;
+            if (chessboard.SquareOccupied(TestPos) && !TestPos.WithinBounds()) return false;
             return true;
         }
 
@@ -211,11 +211,11 @@ namespace LosingChessConsoleApp.Models
             {
                 NewPos.Y = (Position.Y - (Color * 2));
                 NewPos.X = (Position.X);
-                if (!chessboard.SquareOccupied(NewPos) || NewPos.WithinBounds()) return NewPos;
+                if (!chessboard.SquareOccupied(NewPos) && NewPos.WithinBounds()) return NewPos;
             }
             NewPos.Y = (Position.Y - Color);
             NewPos.X = (Position.X);
-            if (!chessboard.SquareOccupied(NewPos) || NewPos.WithinBounds()) return NewPos;
+            if (!chessboard.SquareOccupied(NewPos) && NewPos.WithinBounds()) return NewPos;
             return new Position();
         }
 
@@ -288,6 +288,45 @@ namespace LosingChessConsoleApp.Models
             return false;
         }
 
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            List<Position> _positions = new List<Position>();
+            Position NewPos = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos.Y = (Position.Y - (Color * i));
+                NewPos.X = (Position.X - (Color * i));
+                NewPos.Length = i;
+                if (chessboard.SquareOccupied(NewPos) || !NewPos.WithinBounds()) break;
+            }
+            Position NewPos2 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos2.Y = (Position.Y + (Color * i));
+                NewPos2.X = (Position.X - (Color * i));
+                NewPos2.Length = i;
+                if (chessboard.SquareOccupied(NewPos2) || !NewPos2.WithinBounds()) break;
+            }
+            Position NewPos3 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos3.Y = (Position.Y - (Color * i));
+                NewPos3.X = (Position.X + (Color * i));
+                NewPos3.Length = i;
+                if (chessboard.SquareOccupied(NewPos3) || !NewPos3.WithinBounds()) break;
+            }
+            Position NewPos4 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos4.Y = (Position.Y + (Color * i));
+                NewPos4.X = (Position.X + (Color * i));
+                NewPos4.Length = i;
+                if (chessboard.SquareOccupied(NewPos4) || !NewPos4.WithinBounds()) break;
+            }
+            List<Position> listOfPos = new List<Position>() { NewPos, NewPos2, NewPos3, NewPos4 };
+            return listOfPos.OrderByDescending(x => x.Length).ToList()[0];
+        }
+
         public override bool ValidMove()
         {
             bool returnval = false;
@@ -332,6 +371,36 @@ namespace LosingChessConsoleApp.Models
 
         }
 
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            //Returns Random
+            Position testPosition = new Position();
+            testPosition.X = Position.X + 2;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y + 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y - 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X - 2;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X + 2;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y - 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X - 2;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y + 2;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            return testPosition;
+        }
 
         public override bool CanMove(Chessboard chessboard)
         {
@@ -405,6 +474,45 @@ namespace LosingChessConsoleApp.Models
 
         }
 
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            List<Position> _positions = new List<Position>();
+            Position NewPos = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos.Y = (Position.Y - (Color * i));
+                NewPos.X = (Position.X);
+                NewPos.Length = i;
+                if (chessboard.SquareOccupied(NewPos) || !NewPos.WithinBounds()) break;
+            }
+            Position NewPos2 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos2.Y = (Position.Y + (Color * i));
+                NewPos2.X = (Position.X);
+                NewPos2.Length = i;
+                if (chessboard.SquareOccupied(NewPos2) || !NewPos2.WithinBounds()) break;
+            }
+            Position NewPos3 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos3.Y = (Position.Y);
+                NewPos3.X = (Position.X - (Color * i));
+                NewPos3.Length = i;
+                if (chessboard.SquareOccupied(NewPos3) || !NewPos3.WithinBounds()) break;
+            }
+            Position NewPos4 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos4.Y = (Position.Y);
+                NewPos4.X = (Position.X + (Color * i));
+                NewPos4.Length = i;
+                if (chessboard.SquareOccupied(NewPos4) || !NewPos4.WithinBounds()) break;
+            }
+            List<Position> listOfPos = new List<Position>() { NewPos, NewPos2, NewPos3, NewPos4 };
+            return listOfPos.OrderByDescending(x => x.Length).ToList()[0];
+        }
+
         public override bool CanMove(Chessboard chessboard)
         {
             //Check Square in four adjacent axis
@@ -466,6 +574,78 @@ namespace LosingChessConsoleApp.Models
             Type = 5;
 
         }
+
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            List<Position> _positions = new List<Position>();
+            Position NewPos = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos.Y = (Position.Y - (Color * i));
+                NewPos.X = (Position.X);
+                NewPos.Length = i;
+                if (chessboard.SquareOccupied(NewPos) || !NewPos.WithinBounds()) break;
+            }
+            Position NewPos2 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos2.Y = (Position.Y + (Color * i));
+                NewPos2.X = (Position.X);
+                NewPos2.Length = i;
+                if (chessboard.SquareOccupied(NewPos2) || !NewPos2.WithinBounds()) break;
+            }
+            Position NewPos3 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos3.Y = (Position.Y);
+                NewPos3.X = (Position.X - (Color * i));
+                NewPos3.Length = i;
+                if (chessboard.SquareOccupied(NewPos3) || !NewPos3.WithinBounds()) break;
+            }
+            Position NewPos4 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos4.Y = (Position.Y);
+                NewPos4.X = (Position.X + (Color * i));
+                NewPos4.Length = i;
+                if (chessboard.SquareOccupied(NewPos4) || !NewPos4.WithinBounds()) break;
+            }
+            Position NewPos5 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos5.Y = (Position.Y - (Color * i));
+                NewPos5.X = (Position.X - (Color * i));
+                NewPos5.Length = i;
+                if (chessboard.SquareOccupied(NewPos5) || !NewPos5.WithinBounds()) break;
+            }
+            Position NewPos6 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos6.Y = (Position.Y + (Color * i));
+                NewPos6.X = (Position.X - (Color * i));
+                NewPos6.Length = i;
+                if (chessboard.SquareOccupied(NewPos6) || !NewPos6.WithinBounds()) break;
+            }
+            Position NewPos7 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos7.Y = (Position.Y - (Color * i));
+                NewPos7.X = (Position.X + (Color * i));
+                NewPos7.Length = i;
+                if (chessboard.SquareOccupied(NewPos7) || !NewPos7.WithinBounds()) break;
+            }
+            Position NewPos8 = new Position();
+            for (int i = 0; i < 8; i++)
+            {
+                NewPos8.Y = (Position.Y + (Color * i));
+                NewPos8.X = (Position.X + (Color * i));
+                NewPos8.Length = i;
+                if (chessboard.SquareOccupied(NewPos8) || !NewPos8.WithinBounds()) break;
+            }
+            List<Position> listOfPos = new List<Position>() { NewPos, NewPos2, NewPos3, NewPos4, NewPos5, NewPos6, NewPos7, NewPos8 };
+            return listOfPos.OrderByDescending(x => x.Length).ToList()[0];
+        }
+
         public override bool CanMove(Chessboard chessboard)
         {
             Position testPosition = new Position();
@@ -539,6 +719,24 @@ namespace LosingChessConsoleApp.Models
             NewPosition = new Position(0, 0);
             Value = 100;
             Type = 6;
+        }
+
+        public override Position LongestPositionToMoveTo(Chessboard chessboard)
+        {
+            Position testPosition = new Position();
+            testPosition.X = Position.X + 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y + 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X - 1;
+            testPosition.Y = Position.Y;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            testPosition.X = Position.X;
+            testPosition.Y = Position.Y - 1;
+            if (!chessboard.SquareOccupied(testPosition) && testPosition.WithinBounds()) return testPosition;
+            return testPosition;
         }
 
         public override bool CanMove(Chessboard chessboard)

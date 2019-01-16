@@ -70,5 +70,8 @@ namespace LosingChessConsoleApp.Models
             get;
             set;
         }
+
+        //AI Helper Property
+        public int Length { get; set; }
     }
 }

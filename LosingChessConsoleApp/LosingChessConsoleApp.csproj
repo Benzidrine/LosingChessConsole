@@ -46,6 +46,7 @@
     <Compile Include="Management\ExplicitCast.cs" />
     <Compile Include="Management\InputManager.cs" />
     <Compile Include="Management\PathingManager.cs" />
+    <Compile Include="Management\Player.cs" />
     <Compile Include="Management\PresentationManager.cs" />
     <Compile Include="Objects\Chessboard.cs" />
     <Compile Include="Objects\Choice.cs" />
