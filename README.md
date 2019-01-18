@@ -11,7 +11,7 @@ This project has been seen through to completion and a full game can be played a
 * Machine learning
 
 # Note by Benzidrine
-For myself as a contributor I feel I have led this project as far as I meant to. While it would be fun to setup a local database and train an AI for this, I have decided to pursue a new developmemnt using some principles I learned from this one. I will still take a look at any issues and there is another Contributor that is still interested in further development.
+For myself as a contributor I feel I have led this project as far as I meant to. While it would be fun to setup a local database and train an AI for this, I have decided to pursue a new developmemnt using some principles I learned from this one. I will still take a look at any issues and there is another Contributor, MechatronicsGuyPal, that is still interested in further development.
 
 # Game Reference
 https://en.wikipedia.org/wiki/Losing_Chess
